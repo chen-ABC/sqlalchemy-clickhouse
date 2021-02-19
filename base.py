@@ -47,6 +47,7 @@ ischema_names = {
     'Enum16': VARCHAR,
     'Array': ARRAY,
     'Decimal': DECIMAL,
+    'IPv4': INTEGER
 }
 
 class ClickHouseIdentifierPreparer(PGIdentifierPreparer):
@@ -227,7 +228,9 @@ class ClickHouseDialect(default.DefaultDialect):
         for r in rows:
             col_name = r.name
             col_type = ""
-            if r.type.startswith("AggregateFunction"):
+            if r.type.startswith("LowCardinality"):
+                col_type = r.type[15:-1]
+            elif r.type.startswith("AggregateFunction"):
                 # Extract type information from a column
                 # using AggregateFunction
                 # the type from clickhouse will be 
