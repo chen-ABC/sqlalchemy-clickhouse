@@ -8,7 +8,7 @@ VERSION = [0, 1, 5]
 readme = open('README.rst').read()
 
 setup(
-    name='sqlalchemy-clickhouse',
+    name='pupu-sqlalchemy-clickhouse',
     version='.'.join('%d' % v for v in VERSION[0:3]),
     description='ClickHouse SQLAlchemy Dialect',
     long_description = readme,
