@@ -38,6 +38,7 @@ ischema_names = {
     'UInt8': INTEGER,
     'Date': DATE,
     'DateTime': DATETIME,
+    'DateTime64': DATETIME,
     'Float64': FLOAT,
     'Float32': FLOAT,
     'String': VARCHAR,
@@ -290,9 +291,13 @@ class ClickHouseDialect(default.DefaultDialect):
 
     @reflection.cache
     def get_table_names(self, connection, schema=None, **kw):
-        query = 'SHOW TABLES'
+        # query = 'SHOW TABLES'
+        # if schema:
+        #     query += ' FROM ' + schema
+
+        query = "SELECT name FROM system.tables where engine='Distributed' "
         if schema:
-            query += ' FROM ' + schema
+            query += " AND database = '{}' ".format(schema)
         return [row.name for row in connection.execute(query)]
 
     def do_rollback(self, dbapi_connection):
